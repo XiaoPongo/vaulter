@@ -24,6 +24,12 @@
             position: relative;
             line-height: 1.5;
             padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
         /* Scanlines effect */
@@ -140,6 +146,16 @@
             position: relative;
             overflow: hidden;
             z-index: 10;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 1s forwards 0.5s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Terminal header */
@@ -196,6 +212,16 @@
         .command-log p {
             margin: 5px 0;
             color: #93a1a1;
+            opacity: 0;
+            animation: fadeInLine 0.5s forwards;
+        }
+
+        .command-log p:nth-child(1) { animation-delay: 1s; }
+        .command-log p:nth-child(2) { animation-delay: 1.5s; }
+        .command-log p:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
         }
 
         .command-log p::before {
@@ -218,6 +244,8 @@
             -ms-user-select: none;
             font-weight: bold;
             position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards 2.5s;
         }
 
         /* Input area */
@@ -225,6 +253,8 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards 3s;
         }
 
         .input-prompt {
@@ -282,6 +312,8 @@
             margin-top: 20px;
             min-height: 20px;
             color: #dc322f;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 3.2s;
         }
 
         .response.success {
@@ -300,6 +332,8 @@
             font-family: 'Courier New', Courier, monospace;
             text-transform: uppercase;
             transition: all 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
         }
 
         #next-tier:hover {
@@ -339,6 +373,20 @@
             padding: 20px;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: helpSlideIn 0.5s forwards;
+        }
+
+        .help-panel.active .help-content {
+            animation: helpSlideIn 0.5s forwards;
+        }
+
+        @keyframes helpSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .close-btn {
@@ -362,6 +410,7 @@
             font-size: 1.5em;
             position: relative;
             display: inline-block;
+            width: 100%;
         }
 
         .help-title::after {
@@ -384,6 +433,12 @@
         .help-instructions h3 {
             color: #b58900;
             margin-bottom: 10px;
+            position: relative;
+        }
+
+        .help-instructions h3::after {
+            content: " █";
+            animation: blink 1s step-end infinite;
         }
 
         .help-instructions p {
@@ -415,6 +470,25 @@
             background-color: rgba(0, 15, 20, 0.8);
             border: 1px solid #586e75;
             padding: 15px;
+            position: relative;
+        }
+
+        .tool-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.05),
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: flicker 5s infinite alternate;
         }
 
         .tool-title {
@@ -422,6 +496,8 @@
             margin-bottom: 15px;
             display: flex;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .tool-title::before {
@@ -433,6 +509,8 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
         }
 
         .tool-input-group input {
@@ -458,6 +536,7 @@
             letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            z-index: 2;
         }
 
         .tool-result::before {
@@ -468,7 +547,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(rgba(0, 255, 0, 0.05), 
-                        rgba(0, 255, 0, 0.05);
+                        rgba(0, 255, 0, 0.05));
             pointer-events: none;
         }
 
@@ -485,6 +564,8 @@
             font-family: 'Courier New', Courier, monospace;
             transition: all 0.3s;
             z-index: 100;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 3.5s;
         }
 
         .help-btn:hover {
@@ -671,6 +752,8 @@
                 const log = document.querySelector('.command-log');
                 const successMsg = document.createElement('p');
                 successMsg.textContent = "NEXT SECURITY LAYER WILL INITIATE ON PROCEED";
+                successMsg.style.opacity = 0;
+                successMsg.style.animation = "fadeInLine 0.5s forwards";
                 log.appendChild(successMsg);
             } else {
                 responseDiv.textContent = "> ACCESS DENIED. Pattern mismatch.";
@@ -700,7 +783,7 @@
             const decimal = parseInt(decimalInput.value);
             
             // Validate input
-            if (isNaN(decimal) {
+            if (isNaN(decimal)) {
                 asciiResult.textContent = "INVALID DECIMAL";
                 return;
             }
@@ -782,8 +865,8 @@
             }
         });
 
-        // Initialize the game
-        initGame();
+        // Initialize the game after animations
+        setTimeout(initGame, 3000);
     </script>
 </body>
 </html>
