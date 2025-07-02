@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Vault Heist</title>
+    <title>VAULTER - Data Vault Heist</title>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #002b36 0%, #001e25 100%);
-            color: #ccffcc;
+            background: #000;
+            color: #aaffaa; /* 50% brighter green text */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -23,6 +23,7 @@
             overflow: hidden;
             position: relative;
             line-height: 1.5;
+            cursor: default;
         }
 
         /* CRT Monitor Effect */
@@ -35,8 +36,8 @@
             background: 
                 linear-gradient(rgba(18, 16, 16, 0) 50%, 
                 rgba(0, 0, 0, 0.25) 50%),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), 
-                rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+                linear-gradient(90deg, rgba(0, 255, 0, 0.08), 
+                rgba(0, 255, 0, 0.04), rgba(0, 255, 0, 0.08));
             background-size: 100% 4px, 4px 100%;
             pointer-events: none;
             z-index: 10;
@@ -65,10 +66,10 @@
         .terminal-container {
             width: 90%;
             max-width: 800px;
-            background-color: rgba(0, 21, 26, 0.9);
-            border: 1px solid #586e75;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            background-color: rgba(0, 10, 15, 0.95);
+            border: 1px solid #00aa00;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -82,22 +83,26 @@
         .vaulter-logo {
             font-size: 6em;
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             margin: 40px 0;
-            text-shadow: 0 0 10px rgba(0, 255, 128, 0.5);
+            text-shadow: 0 0 15px rgba(0, 255, 128, 0.8);
             position: relative;
             overflow: hidden;
-            color: #859900;
+            color: #00ff00;
             animation: glitch 3s infinite;
+            text-transform: uppercase;
         }
 
         @keyframes glitch {
-            0% { text-shadow: 0 0 10px rgba(0, 255, 128, 0.5); }
-            2% { transform: translate(2px, 0); text-shadow: 2px 0 0 #ff00c1; }
+            0%, 100% { 
+                transform: translate(0, 0);
+                text-shadow: 0 0 15px rgba(0, 255, 128, 0.8);
+            }
+            2% { transform: translate(3px, 0); text-shadow: 3px 0 0 #ff00c1; }
             3% { transform: translate(0, 0); }
-            5% { transform: translate(-2px, 0); text-shadow: -2px 0 0 #00fff9; }
+            5% { transform: translate(-3px, 0); text-shadow: -3px 0 0 #00fff9; }
             6% { transform: translate(0, 0); }
-            99% { text-shadow: 0 0 10px rgba(0, 255, 128, 0.5); }
+            99% { text-shadow: 0 0 15px rgba(0, 255, 128, 0.8); }
         }
 
         .vaulter-logo::after {
@@ -113,27 +118,41 @@
         }
 
         .byline {
-            font-size: 1.5em;
-            color: #93a1a1;
-            margin: 20px 0 40px;
+            font-size: 1.8em;
+            color: #aaffaa;
+            margin: 30px 0 50px;
             opacity: 0;
-            text-shadow: 0 0 5px rgba(0, 255, 128, 0.3);
+            text-shadow: 0 0 8px rgba(0, 255, 128, 0.5);
+            letter-spacing: 2px;
         }
 
-        .enter-prompt {
-            font-size: 1.2em;
-            color: #93a1a1;
-            margin: 40px 0;
+        .tap-prompt {
+            font-size: 1.8em;
+            color: #aaffaa;
+            margin: 60px 0 30px;
             opacity: 0;
+            text-shadow: 0 0 8px rgba(0, 255, 128, 0.5);
+            letter-spacing: 1px;
+            padding: 15px 30px;
+            border: 2px solid #00aa00;
+            border-radius: 5px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.6); }
         }
 
         .cursor {
             display: inline-block;
-            width: 10px;
-            height: 1em;
-            background-color: #859900;
+            width: 12px;
+            height: 1.2em;
+            background-color: #00ff00;
             vertical-align: middle;
             animation: blink 1s step-end infinite;
+            margin-left: 5px;
         }
 
         @keyframes blink {
@@ -148,38 +167,42 @@
 
         .line {
             opacity: 0;
-            margin: 10px 0;
+            margin: 15px 0;
+            font-size: 1.3em;
+            color: #aaffaa;
         }
 
         #start-button {
             display: none;
-            background: none;
-            border: 2px solid #859900;
-            color: #859900;
+            background: rgba(0, 80, 0, 0.3);
+            border: 2px solid #00aa00;
+            color: #aaffaa;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 1.2em;
-            padding: 10px 20px;
+            font-size: 1.4em;
+            padding: 12px 30px;
             cursor: pointer;
             text-transform: uppercase;
-            margin-top: 20px;
+            margin-top: 30px;
             transition: all 0.3s;
+            letter-spacing: 2px;
         }
 
         #start-button:hover {
-            background: #859900;
-            color: #002b36;
+            background: rgba(0, 120, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
 
         #tip {
             width: 90%;
             max-width: 800px;
-            padding: 10px;
-            font-size: 0.9em;
+            padding: 15px;
+            font-size: 1.1em;
             text-align: center;
-            border-top: 1px solid #586e75;
-            margin-top: 20px;
-            color: #93a1a1;
+            border-top: 1px solid #008800;
+            margin-top: 30px;
+            color: #88ff88;
             opacity: 0;
+            letter-spacing: 1px;
         }
 
         /* Scanlines effect */
@@ -191,8 +214,8 @@
             height: 100%;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(0, 43, 54, 0.8),
-                rgba(0, 43, 54, 0.8) 1px,
+                rgba(0, 30, 0, 0.8),
+                rgba(0, 30, 0, 0.8) 1px,
                 transparent 1px,
                 transparent 2px
             );
@@ -207,7 +230,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            box-shadow: inset 0 0 50px rgba(0, 255, 128, 0.1);
+            box-shadow: inset 0 0 80px rgba(0, 255, 128, 0.2);
             pointer-events: none;
             z-index: 1;
         }
@@ -215,40 +238,55 @@
         /* Power button */
         .power-button {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: #dc322f;
-            border: 2px solid #b58900;
+            background: #008800;
+            border: 2px solid #00cc00;
             cursor: pointer;
             z-index: 20;
-            box-shadow: 0 0 10px rgba(220, 50, 47, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.5em;
+            font-weight: bold;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .vaulter-logo {
-                font-size: 3.5em;
+                font-size: 3.8em;
             }
             
-            .byline {
-                font-size: 1.2em;
+            .byline, .tap-prompt {
+                font-size: 1.5em;
             }
             
             .terminal-container {
-                padding: 15px;
+                padding: 20px;
+            }
+            
+            .line {
+                font-size: 1.1em;
             }
         }
 
         @media (max-width: 480px) {
             .vaulter-logo {
-                font-size: 2.5em;
+                font-size: 2.8em;
+                letter-spacing: 3px;
             }
             
-            .byline {
-                font-size: 1em;
+            .byline, .tap-prompt {
+                font-size: 1.2em;
+            }
+            
+            .tap-prompt {
+                padding: 10px 20px;
             }
         }
     </style>
@@ -258,13 +296,13 @@
     <div class="screen-curvature"></div>
     <div class="scanlines"></div>
     <div class="glow"></div>
-    <div class="power-button" id="power-btn"></div>
+    <div class="power-button" id="power-btn">⏻</div>
     
     <div class="terminal-container">
         <div id="intro-screen">
             <div class="vaulter-logo" id="vaulter-text">VAULTER</div>
             <div class="byline" id="byline">-By The Bandar Co.</div>
-            <div class="enter-prompt" id="enter-prompt">Press <span style="color:#859900; font-weight:bold">ENTER</span> to start<span class="cursor"></span></div>
+            <div class="tap-prompt" id="tap-prompt">CLICK OR TAP ANYWHERE TO CONTINUE<span class="cursor"></span></div>
         </div>
         
         <div id="terminal-content">
@@ -276,7 +314,7 @@
         </div>
     </div>
     
-    <div id="tip">Tip of the Day: Stay sharp, Agent. The vault never sleeps.</div>
+    <div id="tip">Loading security tip...</div>
 
     <script>
         // Initial animation sequence
@@ -285,54 +323,52 @@
             document.getElementById('byline').style.opacity = "1";
             document.getElementById('byline').style.transition = "opacity 1.5s ease";
             
-            // Show the enter prompt
+            // Show the tap prompt
             setTimeout(() => {
-                document.getElementById('enter-prompt').style.opacity = "1";
-                document.getElementById('enter-prompt').style.transition = "opacity 1.5s ease";
+                document.getElementById('tap-prompt').style.opacity = "1";
+                document.getElementById('tap-prompt').style.transition = "opacity 1.5s ease";
             }, 1000);
         }, 1500);
         
-        // Listen for ENTER key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Enter") {
-                // Hide intro screen
-                document.getElementById('intro-screen').style.opacity = "0";
-                document.getElementById('intro-screen').style.transition = "opacity 1s ease";
+        // Listen for click/tap anywhere
+        document.addEventListener('click', function() {
+            // Hide intro screen
+            document.getElementById('intro-screen').style.opacity = "0";
+            document.getElementById('intro-screen').style.transition = "opacity 1s ease";
+            
+            // Show terminal content after a delay
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = "none";
+                document.getElementById('terminal-content').style.display = "block";
                 
-                // Show terminal content after a delay
-                setTimeout(() => {
-                    document.getElementById('intro-screen').style.display = "none";
-                    document.getElementById('terminal-content').style.display = "block";
-                    
-                    // Animate terminal lines in
-                    const lines = document.querySelectorAll('.line');
-                    lines.forEach((line, index) => {
-                        setTimeout(() => {
-                            line.style.opacity = "1";
-                            line.style.transition = "opacity 0.8s ease";
-                            
-                            // Show start button after last line
-                            if (index === lines.length - 1) {
-                                setTimeout(() => {
-                                    document.getElementById('start-button').style.display = "block";
-                                    document.getElementById('start-button').style.opacity = "0";
-                                    
-                                    let opacity = 0;
-                                    const fadeIn = setInterval(() => {
-                                        opacity += 0.05;
-                                        document.getElementById('start-button').style.opacity = opacity;
-                                        if (opacity >= 1) clearInterval(fadeIn);
-                                    }, 50);
-                                    
-                                    // Show tip
-                                    document.getElementById('tip').style.opacity = "1";
-                                    document.getElementById('tip').style.transition = "opacity 1s ease";
-                                }, 500);
-                            }
-                        }, index * 1000);
-                    });
-                }, 1000);
-            }
+                // Animate terminal lines in
+                const lines = document.querySelectorAll('.line');
+                lines.forEach((line, index) => {
+                    setTimeout(() => {
+                        line.style.opacity = "1";
+                        line.style.transition = "opacity 0.8s ease";
+                        
+                        // Show start button after last line
+                        if (index === lines.length - 1) {
+                            setTimeout(() => {
+                                document.getElementById('start-button').style.display = "block";
+                                document.getElementById('start-button').style.opacity = "0";
+                                
+                                let opacity = 0;
+                                const fadeIn = setInterval(() => {
+                                    opacity += 0.05;
+                                    document.getElementById('start-button').style.opacity = opacity;
+                                    if (opacity >= 1) clearInterval(fadeIn);
+                                }, 50);
+                                
+                                // Show tip
+                                document.getElementById('tip').style.opacity = "1";
+                                document.getElementById('tip').style.transition = "opacity 1s ease";
+                            }, 500);
+                        }
+                    }, index * 1000);
+                });
+            }, 1000);
         });
         
         // Start button handler
@@ -348,9 +384,11 @@
         
         // Power button effect
         document.getElementById('power-btn').addEventListener('click', function() {
-            this.style.boxShadow = "0 0 20px rgba(220, 50, 47, 0.8)";
+            this.style.boxShadow = "0 0 25px rgba(0, 255, 0, 0.8)";
+            this.style.transform = "scale(1.1)";
             setTimeout(() => {
-                this.style.boxShadow = "0 0 10px rgba(220, 50, 47, 0.5)";
+                this.style.boxShadow = "0 0 15px rgba(0, 255, 0, 0.5)";
+                this.style.transform = "scale(1)";
             }, 200);
         });
         
@@ -362,22 +400,23 @@
                 const quotes = text.split('\n').filter(q => q.trim());
                 if (quotes.length > 0) {
                     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-                    document.getElementById('tip').textContent = `Tip of the Day: ${randomQuote}`;
+                    document.getElementById('tip').textContent = `SECURITY TIP: ${randomQuote}`;
                 }
             } catch (error) {
                 console.error('Failed to load quotes:', error);
                 // Fallback tips if quotes.md is not available
                 const tips = [
-                    "Tip: Speed matters in the vault. Quick thinking is essential.",
-                    "Tip: Security systems adapt. Expect countermeasures at every turn.",
-                    "Tip: Trust your instincts. The vault has many layers of deception.",
-                    "Tip: Time is your greatest ally and worst enemy. Use it wisely.",
-                    "Tip: Patterns emerge to those who observe carefully.",
-                    "Tip: The vault's defenses are designed to confuse. Stay focused.",
-                    "Tip: Every failed attempt strengthens the security systems.",
-                    "Tip: Look for anomalies - they often reveal hidden paths."
+                    "Speed matters in the vault. Quick thinking is essential.",
+                    "Security systems adapt. Expect countermeasures at every turn.",
+                    "Trust your instincts. The vault has many layers of deception.",
+                    "Time is your greatest ally and worst enemy. Use it wisely.",
+                    "Patterns emerge to those who observe carefully.",
+                    "The vault's defenses are designed to confuse. Stay focused.",
+                    "Every failed attempt strengthens the security systems.",
+                    "Look for anomalies - they often reveal hidden paths."
                 ];
-                document.getElementById('tip').textContent = tips[Math.floor(Math.random() * tips.length)];
+                document.getElementById('tip').textContent = 
+                    `SECURITY TIP: ${tips[Math.floor(Math.random() * tips.length)]}`;
             }
         }
         
