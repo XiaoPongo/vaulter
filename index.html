@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Vault Heist</title>
+    <style>
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #terminal {
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            text-align: left;
+        }
+        .line {
+            opacity: 0;
+            margin: 10px 0;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background: #00ff00;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        #start-button {
+            display: none;
+            background: none;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        #start-button:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        #tip {
+            width: 90%;
+            max-width: 800px;
+            padding: 10px;
+            font-size: 0.9em;
+            text-align: center;
+            border-top: 1px solid #00ff00;
+        }
+        @media (max-width: 600px) {
+            #terminal, #tip {
+                width: 95%;
+                font-size: 0.8em;
+            }
+            #start-button {
+                font-size: 1em;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div class="line">> ACCESSING MAINFRAME...</div>
+        <div class="line">> INITIATING CONNECTION...</div>
+        <div class="line">> IDENTITY VERIFIED</div>
+        <div class="line">> WELCOME, AGENT_037<span class="cursor"></span></div>
+        <button id="start-button">ENTER</button>
+    </div>
+    <div id="tip">Tip of the Day: Stay sharp, Agent. The vault never sleeps.</div>
+
+    <script>
+        const lines = document.querySelectorAll('.line');
+        const startButton = document.getElementById('start-button');
+        const tipElement = document.getElementById('tip');
+
+        // Typewriter effect
+        function typeLine(index) {
+            if (index < lines.length) {
+                lines[index].style.opacity = '1';
+                setTimeout(() => typeLine(index + 1), 1000);
+            } else {
+                setTimeout(() => {
+                    startButton.style.display = 'block';
+                    startButton.style.opacity = '0';
+                    let opacity = 0;
+                    const fadeIn = setInterval(() => {
+                        opacity += 0.05;
+                        startButton.style.opacity = opacity;
+                        if (opacity >= 1) clearInterval(fadeIn);
+                    }, 50);
+                }, 500);
+            }
+        }
+
+        // Start typewriter effect
+        setTimeout(() => typeLine(0), 500);
+
+        // Button click handler
+        startButton.addEventListener('click', () => {
+            window.location.href = 'tier1.html';
+        });
+
+        // Fetch and display random quote
+        async function loadQuote() {
+            try {
+                const response = await fetch('quotes.md');
+                const text = await response.text();
+                const quotes = text.split('\n').filter(q => q.trim());
+                if (quotes.length > 0) {
+                    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                    tipElement.textContent = `Tip of the Day: ${randomQuote}`;
+                }
+            } catch (error) {
+                console.error('Failed to load quotes:', error);
+                tipElement.textContent = 'Tip of the Day: Stay sharp, Agent. The vault never sleeps.';
+            }
+        }
+
+        // Load quote on page load
+        loadQuote();
+    </script>
+</body>
+</html>
