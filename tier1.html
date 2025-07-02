@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Vault Heist | Tier 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background: linear-gradient(135deg, #002b36 0%, #001e25 100%);
+            color: #ccffcc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        /* Scanlines effect */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 43, 54, 0.8),
+                rgba(0, 43, 54, 0.8) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: flicker 10s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            10%, 30%, 50%, 70%, 90% { opacity: 0.85; }
+            20%, 40%, 60%, 80% { opacity: 0.75; }
+        }
+
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #00fff9, 1px 1px #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(73px, 9999px, 99px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+
+        /* Terminal container */
+        .terminal {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(0, 21, 26, 0.9);
+            border: 1px solid #586e75;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Terminal header */
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #93a1a1;
+            font-size: 0.9em;
+            border-bottom: 1px solid #586e75;
+            padding-bottom: 5px;
+        }
+
+        /* Volume controls */
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-slider {
+            width: 100px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: #073642;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #859900;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mute-toggle {
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .mute-toggle:hover {
+            color: #dc322f;
+        }
+
+        /* Command log */
+        .command-log {
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+
+        .command-log p {
+            margin: 5px 0;
+            color: #93a1a1;
+        }
+
+        .command-log p::before {
+            content: "> ";
+            color: #859900;
+        }
+
+        /* Binary display */
+        .binary-display {
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            margin: 30px 0;
+            padding: 15px;
+            background-color: rgba(7, 54, 66, 0.5);
+            border: 1px solid #586e75;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            font-weight: bold;
+            position: relative;
+        }
+
+        /* Input area */
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .input-prompt {
+            color: #859900;
+            white-space: nowrap;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #586e75;
+            color: #eee8d5;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            padding: 5px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-bottom-color: #859900;
+        }
+
+        button {
+            background-color: #073642;
+            color: #93a1a1;
+            border: 1px solid #586e75;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #586e75;
+            color: #eee8d5;
+        }
+
+        /* Blinking cursor */
+        .blinking-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1em;
+            background-color: #859900;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Response message */
+        .response {
+            margin-top: 20px;
+            min-height: 20px;
+            color: #dc322f;
+        }
+
+        .response.success {
+            color: #859900;
+        }
+
+        /* Next tier button */
+        #next-tier {
+            display: none;
+            margin-top: 20px;
+            background-color: #073642;
+            color: #93a1a1;
+            border: 1px solid #586e75;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        #next-tier:hover {
+            background-color: #586e75;
+            color: #eee8d5;
+        }
+
+        /* Help panel */
+        .help-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .help-panel.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .help-content {
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background-color: rgba(0, 21, 26, 0.95);
+            border: 2px solid #859900;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #dc322f;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .help-title {
+            color: #859900;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.5em;
+            position: relative;
+            display: inline-block;
+        }
+
+        .help-title::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #859900, transparent);
+        }
+
+        .help-instructions {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: rgba(7, 54, 66, 0.5);
+            border: 1px solid #586e75;
+        }
+
+        .help-instructions h3 {
+            color: #b58900;
+            margin-bottom: 10px;
+        }
+
+        .help-instructions p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .help-instructions ul {
+            margin: 15px 0 15px 30px;
+        }
+
+        .help-instructions li {
+            margin: 8px 0;
+        }
+
+        .tools-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .tools-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .tool-box {
+            background-color: rgba(0, 15, 20, 0.8);
+            border: 1px solid #586e75;
+            padding: 15px;
+        }
+
+        .tool-title {
+            color: #268bd2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-title::before {
+            content: "> ";
+            color: #859900;
+        }
+
+        .tool-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tool-input-group input {
+            flex-grow: 1;
+            background: rgba(7, 54, 66, 0.5);
+            border: 1px solid #586e75;
+            color: #eee8d5;
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .tool-result {
+            background-color: #000;
+            color: #00ff00;
+            border: 1px solid #268bd2;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-result::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 255, 0, 0.05), 
+                        rgba(0, 255, 0, 0.05);
+            pointer-events: none;
+        }
+
+        /* Help button */
+        .help-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: #073642;
+            color: #93a1a1;
+            border: 1px solid #586e75;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .help-btn:hover {
+            background-color: #586e75;
+            color: #eee8d5;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .terminal {
+                padding: 15px;
+            }
+
+            .binary-display {
+                font-size: 1.2em;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                padding: 8px;
+            }
+
+            .tools-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="glitch" data-text="DATA VAULT HEIST :: TIER 1">DATA VAULT HEIST :: TIER 1</div>
+            <div class="volume-controls">
+                <input type="range" class="volume-slider" min="0" max="100" value="50">
+                <span class="mute-toggle">🔊</span>
+            </div>
+        </div>
+
+        <div class="command-log">
+            <p>TIER 1 ACCESS GRANTED...</p>
+            <p>SYSTEM INTEGRITY: NOMINAL</p>
+            <p>BEGIN DECRYPTION SEQUENCE<span class="blinking-cursor"></span></p>
+        </div>
+
+        <div class="binary-display" id="binary-code">01100011 01101111 01100100 01100101</div>
+
+        <div class="input-area">
+            <span class="input-prompt">> DECODE:</span>
+            <input type="text" id="user-input" placeholder="Enter decoded word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button id="decode-btn">DECODE</button>
+        </div>
+
+        <div class="response" id="response"></div>
+
+        <button id="next-tier">PROCEED TO TIER 2</button>
+    </div>
+
+    <button class="help-btn" id="help-btn">HELP</button>
+
+    <!-- Help Panel -->
+    <div class="help-panel" id="help-panel">
+        <div class="help-content">
+            <button class="close-btn" id="close-btn">[X]</button>
+            
+            <h2 class="help-title">DECRYPTION HELP – TIER 1</h2>
+            
+            <div class="help-instructions">
+                <h3>MISSION OBJECTIVE</h3>
+                <p>Decode the binary string to reveal the hidden word.</p>
+                
+                <h3>DECRYPTION PROCESS</h3>
+                <p>Each 8-digit group represents a single character in binary format.</p>
+                
+                <p><strong>Example:</strong><br>
+                01101000 01100001 01100011 01101011</p>
+                
+                <p><strong>Step-by-Step:</strong></p>
+                <ol>
+                    <li>Convert each binary group to decimal (e.g., 01101000 → 104)</li>
+                    <li>Find the ASCII character for that decimal (104 → "h")</li>
+                    <li>Combine all characters to form the word</li>
+                </ol>
+                
+                <h3>OPERATIONAL NOTES</h3>
+                <ul>
+                    <li>All answers are 3–5 letter tech-related words</li>
+                    <li>Answers are case-insensitive (e.g. "CODE" = "code")</li>
+                    <li>Possible words: code, data, hack, root, gate, chip, byte, null, void, grep, etc.</li>
+                </ul>
+                
+                <p><strong>Use the tools below to assist in decryption:</strong></p>
+            </div>
+            
+            <div class="tools-container">
+                <div class="tool-box">
+                    <div class="tool-title">BINARY TO DECIMAL CONVERTER</div>
+                    <div class="tool-input-group">
+                        <input type="text" id="binary-input" placeholder="Enter binary (e.g. 01101000)" maxlength="8">
+                        <button id="convert-btn">CONVERT</button>
+                    </div>
+                    <div class="tool-result" id="decimal-result">---</div>
+                </div>
+                
+                <div class="tool-box">
+                    <div class="tool-title">ASCII PAGER</div>
+                    <div class="tool-input-group">
+                        <input type="number" id="decimal-input" placeholder="Enter decimal (e.g. 104)" min="0" max="255">
+                        <button id="lookup-btn">LOOKUP</button>
+                    </div>
+                    <div class="tool-result" id="ascii-result">---</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Word list for the game
+        const wordList = [
+            "code", "data", "hack", "root", "gate", "chip", "byte", "fire", 
+            "deep", "bits", "null", "void", "true", "keys", "node", "link", 
+            "worm", "shell", "load", "boot", "cryp", "exit", "ping", "kill", 
+            "bash", "main", "sudo", "auth", "grep", "init", "core", "disk", 
+            "port", "hash", "brew", "loop", "join", "drop", "read", "pull"
+        ];
+
+        // DOM elements
+        const binaryDisplay = document.getElementById('binary-code');
+        const userInput = document.getElementById('user-input');
+        const decodeBtn = document.getElementById('decode-btn');
+        const responseDiv = document.getElementById('response');
+        const nextTierBtn = document.getElementById('next-tier');
+        const muteToggle = document.querySelector('.mute-toggle');
+        const volumeSlider = document.querySelector('.volume-slider');
+        const helpBtn = document.getElementById('help-btn');
+        const helpPanel = document.getElementById('help-panel');
+        const closeBtn = document.getElementById('close-btn');
+        const binaryInput = document.getElementById('binary-input');
+        const convertBtn = document.getElementById('convert-btn');
+        const decimalResult = document.getElementById('decimal-result');
+        const decimalInput = document.getElementById('decimal-input');
+        const lookupBtn = document.getElementById('lookup-btn');
+        const asciiResult = document.getElementById('ascii-result');
+
+        // Current word to decode
+        let currentWord = '';
+
+        // Initialize the game
+        function initGame() {
+            // Select a random word
+            currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+            
+            // Convert word to binary
+            let binaryString = '';
+            for (let i = 0; i < currentWord.length; i++) {
+                const charCode = currentWord.charCodeAt(i);
+                binaryString += charCode.toString(2).padStart(8, '0') + ' ';
+            }
+            
+            // Display binary string
+            binaryDisplay.textContent = binaryString.trim();
+            
+            // Clear previous responses
+            responseDiv.textContent = '';
+            responseDiv.className = 'response';
+            nextTierBtn.style.display = 'none';
+            userInput.value = '';
+            userInput.focus();
+        }
+
+        // Check user's answer
+        function checkAnswer() {
+            const userAnswer = userInput.value.trim().toLowerCase();
+            
+            if (userAnswer === currentWord) {
+                responseDiv.textContent = "> DATA FRAGMENT UNLOCKED: Enigma-class pattern matched.";
+                responseDiv.className = 'response success';
+                nextTierBtn.style.display = 'block';
+                
+                // Add success message to log
+                const log = document.querySelector('.command-log');
+                const successMsg = document.createElement('p');
+                successMsg.textContent = "NEXT SECURITY LAYER WILL INITIATE ON PROCEED";
+                log.appendChild(successMsg);
+            } else {
+                responseDiv.textContent = "> ACCESS DENIED. Pattern mismatch.";
+                responseDiv.className = 'response';
+                userInput.value = '';
+                userInput.focus();
+            }
+        }
+
+        // Binary to Decimal conversion
+        function convertBinary() {
+            const binary = binaryInput.value.trim();
+            
+            // Validate input (only 0s and 1s)
+            if (!/^[01]{1,8}$/.test(binary)) {
+                decimalResult.textContent = "INVALID BINARY";
+                return;
+            }
+            
+            // Convert binary to decimal
+            const decimal = parseInt(binary, 2);
+            decimalResult.textContent = `Decimal: ${decimal}`;
+        }
+
+        // Decimal to ASCII conversion
+        function lookupAscii() {
+            const decimal = parseInt(decimalInput.value);
+            
+            // Validate input
+            if (isNaN(decimal) {
+                asciiResult.textContent = "INVALID DECIMAL";
+                return;
+            }
+            
+            if (decimal < 0 || decimal > 255) {
+                asciiResult.textContent = "OUT OF RANGE (0-255)";
+                return;
+            }
+            
+            // Get ASCII character
+            const char = String.fromCharCode(decimal);
+            asciiResult.textContent = `Character: '${char}'`;
+        }
+
+        // Event listeners
+        decodeBtn.addEventListener('click', checkAnswer);
+        
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        nextTierBtn.addEventListener('click', function() {
+            // For demo purposes, just restart the game
+            initGame();
+            // In actual game: window.location.href = 'tier2.html';
+        });
+
+        // Volume controls (placeholder functionality)
+        muteToggle.addEventListener('click', function() {
+            if (this.textContent === '🔊') {
+                this.textContent = '🔇';
+                volumeSlider.value = 0;
+            } else {
+                this.textContent = '🔊';
+                volumeSlider.value = 50;
+            }
+        });
+
+        volumeSlider.addEventListener('input', function() {
+            if (this.value === '0') {
+                muteToggle.textContent = '🔇';
+            } else {
+                muteToggle.textContent = '🔊';
+            }
+        });
+
+        // Help panel controls
+        helpBtn.addEventListener('click', function() {
+            helpPanel.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', function() {
+            helpPanel.classList.remove('active');
+        });
+
+        // Close panel when clicking outside content
+        helpPanel.addEventListener('click', function(e) {
+            if (e.target === helpPanel) {
+                helpPanel.classList.remove('active');
+            }
+        });
+
+        // Tool functions
+        convertBtn.addEventListener('click', convertBinary);
+        
+        binaryInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                convertBinary();
+            }
+        });
+
+        lookupBtn.addEventListener('click', lookupAscii);
+        
+        decimalInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                lookupAscii();
+            }
+        });
+
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>
