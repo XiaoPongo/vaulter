@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Vault Heist | Tier 2</title>
     <style>
+        /* General Setup */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +33,7 @@
             to { opacity: 1; }
         }
 
-        /* Hex Grid Overlay */
+        /* Background Effects: Hex Grid & Scanlines */
         body::after {
             content: "";
             position: absolute;
@@ -41,8 +42,8 @@
             width: 100%;
             height: 100%;
             background-image:
-                radial-gradient(circle at center, rgba(255, 105, 180, 0.1) 1px, transparent 1px),
-                radial-gradient(circle at center, rgba(255, 105, 180, 0.1) 1px, transparent 1px);
+                radial-gradient(circle at center, rgba(255, 105, 180, 0.08) 1px, transparent 1px),
+                radial-gradient(circle at center, rgba(255, 105, 180, 0.08) 1px, transparent 1px);
             background-size: 50px 50px;
             background-position: 0 0, 25px 25px;
             pointer-events: none;
@@ -50,8 +51,6 @@
             opacity: 0.3;
         }
 
-
-        /* Scanlines effect */
         body::before {
             content: "";
             position: absolute;
@@ -59,13 +58,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(44, 0, 30, 0.8),
-                rgba(44, 0, 30, 0.8) 1px,
-                transparent 1px,
-                transparent 2px
-            );
+            background: repeating-linear-gradient(0deg, rgba(44, 0, 30, 0.8), rgba(44, 0, 30, 0.8) 1px, transparent 1px, transparent 2px);
             pointer-events: none;
             z-index: 1;
             animation: flicker 10s infinite alternate;
@@ -73,11 +66,10 @@
 
         @keyframes flicker {
             0%, 100% { opacity: 0.8; }
-            10%, 30%, 50%, 70%, 90% { opacity: 0.85; }
-            20%, 40%, 60%, 80% { opacity: 0.75; }
+            50% { opacity: 0.85; }
         }
 
-        /* Glitch effect */
+        /* Glitch Effect for Title */
         .glitch {
             position: relative;
             color: #ff99e6;
@@ -109,34 +101,14 @@
         }
 
         @keyframes glitch-anim {
-            0% { clip: rect(42px, 9999px, 44px, 0); } 5% { clip: rect(12px, 9999px, 59px, 0); }
-            10% { clip: rect(48px, 9999px, 29px, 0); } 15% { clip: rect(42px, 9999px, 73px, 0); }
-            20% { clip: rect(63px, 9999px, 27px, 0); } 25% { clip: rect(34px, 9999px, 55px, 0); }
-            30% { clip: rect(86px, 9999px, 73px, 0); } 35% { clip: rect(20px, 9999px, 20px, 0); }
-            40% { clip: rect(26px, 9999px, 60px, 0); } 45% { clip: rect(25px, 9999px, 66px, 0); }
-            50% { clip: rect(57px, 9999px, 98px, 0); } 55% { clip: rect(5px, 9999px, 46px, 0); }
-            60% { clip: rect(82px, 9999px, 31px, 0); } 65% { clip: rect(54px, 9999px, 27px, 0); }
-            70% { clip: rect(28px, 9999px, 99px, 0); } 75% { clip: rect(45px, 9999px, 69px, 0); }
-            80% { clip: rect(23px, 9999px, 85px, 0); } 85% { clip: rect(54px, 9999px, 84px, 0); }
-            90% { clip: rect(45px, 9999px, 47px, 0); } 95% { clip: rect(37px, 9999px, 20px, 0); }
-            100% { clip: rect(73px, 9999px, 99px, 0); }
+            0% { clip: rect(42px, 9999px, 44px, 0); } 5% { clip: rect(12px, 9999px, 59px, 0); } 10% { clip: rect(48px, 9999px, 29px, 0); } 15% { clip: rect(42px, 9999px, 73px, 0); } 20% { clip: rect(63px, 9999px, 27px, 0); } 25% { clip: rect(34px, 9999px, 55px, 0); } 30% { clip: rect(86px, 9999px, 73px, 0); } 35% { clip: rect(20px, 9999px, 20px, 0); } 40% { clip: rect(26px, 9999px, 60px, 0); } 45% { clip: rect(25px, 9999px, 66px, 0); } 50% { clip: rect(57px, 9999px, 98px, 0); } 55% { clip: rect(5px, 9999px, 46px, 0); } 60% { clip: rect(82px, 9999px, 31px, 0); } 65% { clip: rect(54px, 9999px, 27px, 0); } 70% { clip: rect(28px, 9999px, 99px, 0); } 75% { clip: rect(45px, 9999px, 69px, 0); } 80% { clip: rect(23px, 9999px, 85px, 0); } 85% { clip: rect(54px, 9999px, 84px, 0); } 90% { clip: rect(45px, 9999px, 47px, 0); } 95% { clip: rect(37px, 9999px, 20px, 0); } 100% { clip: rect(73px, 9999px, 99px, 0); }
         }
 
         @keyframes glitch-anim2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); } 5% { clip: rect(52px, 9999px, 74px, 0); }
-            10% { clip: rect(79px, 9999px, 85px, 0); } 15% { clip: rect(75px, 9999px, 5px, 0); }
-            20% { clip: rect(67px, 9999px, 61px, 0); } 25% { clip: rect(14px, 9999px, 79px, 0); }
-            30% { clip: rect(1px, 9999px, 66px, 0); } 35% { clip: rect(86px, 9999px, 30px, 0); }
-            40% { clip: rect(23px, 9999px, 98px, 0); } 45% { clip: rect(85px, 9999px, 72px, 0); }
-            50% { clip: rect(71px, 9999px, 75px, 0); } 55% { clip: rect(2px, 9999px, 48px, 0); }
-            60% { clip: rect(30px, 9999px, 16px, 0); } 65% { clip: rect(59px, 9999px, 50px, 0); }
-            70% { clip: rect(41px, 9999px, 62px, 0); } 75% { clip: rect(2px, 9999px, 82px, 0); }
-            80% { clip: rect(47px, 9999px, 73px, 0); } 85% { clip: rect(3px, 9999px, 27px, 0); }
-            90% { clip: rect(26px, 9999px, 55px, 0); } 95% { clip: rect(42px, 9999px, 97px, 0); }
-            100% { clip: rect(38px, 9999px, 49px, 0); }
+            0% { clip: rect(65px, 9999px, 100px, 0); } 5% { clip: rect(52px, 9999px, 74px, 0); } 10% { clip: rect(79px, 9999px, 85px, 0); } 15% { clip: rect(75px, 9999px, 5px, 0); } 20% { clip: rect(67px, 9999px, 61px, 0); } 25% { clip: rect(14px, 9999px, 79px, 0); } 30% { clip: rect(1px, 9999px, 66px, 0); } 35% { clip: rect(86px, 9999px, 30px, 0); } 40% { clip: rect(23px, 9999px, 98px, 0); } 45% { clip: rect(85px, 9999px, 72px, 0); } 50% { clip: rect(71px, 9999px, 75px, 0); } 55% { clip: rect(2px, 9999px, 48px, 0); } 60% { clip: rect(30px, 9999px, 16px, 0); } 65% { clip: rect(59px, 9999px, 50px, 0); } 70% { clip: rect(41px, 9999px, 62px, 0); } 75% { clip: rect(2px, 9999px, 82px, 0); } 80% { clip: rect(47px, 9999px, 73px, 0); } 85% { clip: rect(3px, 9999px, 27px, 0); } 90% { clip: rect(26px, 9999px, 55px, 0); } 95% { clip: rect(42px, 9999px, 97px, 0); } 100% { clip: rect(38px, 9999px, 49px, 0); }
         }
 
-        /* Terminal container */
+        /* Terminal styling */
         .terminal {
             width: 100%;
             max-width: 800px;
@@ -153,10 +125,7 @@
         }
 
         @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Timer */
@@ -184,11 +153,11 @@
             100% { background-color: rgba(220, 50, 47, 0.6); }
         }
 
-
-        /* Terminal header */
+        /* Terminal Header & Volume Controls */
         .terminal-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
             color: #d1a1c4;
             font-size: 0.9em;
@@ -196,7 +165,6 @@
             padding-bottom: 5px;
         }
 
-        /* Volume controls */
         .volume-controls {
             display: flex;
             align-items: center;
@@ -230,7 +198,7 @@
             color: #dc322f;
         }
 
-        /* Command log */
+        /* Command Log & Cipher Display */
         .command-log {
             margin-bottom: 20px;
             min-height: 60px;
@@ -256,10 +224,9 @@
             color: #ff66cc;
         }
 
-        /* Cipher display */
         .cipher-display {
-            font-size: 1.5em;
-            letter-spacing: 4px;
+            font-size: 1.2em;
+            letter-spacing: 3px;
             margin: 30px 0;
             padding: 20px;
             background-color: rgba(44, 0, 30, 0.5);
@@ -268,17 +235,15 @@
             text-align: center;
             user-select: none;
             -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
             font-weight: bold;
             position: relative;
             opacity: 0;
             color: #fce1f6;
             animation: fadeIn 0.8s forwards 2.5s;
+            word-wrap: break-word;
         }
 
-
-        /* Input area */
+        /* Input Area */
         .input-area {
             display: flex;
             gap: 10px;
@@ -307,6 +272,12 @@
         input[type="text"]:focus {
             border-bottom-color: #ff66cc;
         }
+        
+        input[type="text"]:disabled {
+            background-color: rgba(0,0,0,0.2);
+            color: #666;
+            cursor: not-allowed;
+        }
 
         button {
             background-color: #4d1933;
@@ -322,8 +293,15 @@
             background-color: #993266;
             color: #ffe6f9;
         }
+        
+        button:disabled {
+            background-color: #333;
+            color: #666;
+            border-color: #444;
+            cursor: not-allowed;
+        }
 
-        /* Blinking cursor */
+        /* Blinking Cursor */
         .blinking-cursor {
             display: inline-block;
             width: 10px;
@@ -337,20 +315,20 @@
             50% { opacity: 0; }
         }
 
-        /* Response message */
+        /* Response & Next Tier Button */
         .response {
             margin-top: 20px;
             min-height: 20px;
             color: #dc322f;
             opacity: 0;
-            animation: fadeIn 0.5s forwards 3.2s;
+            animation: fadeIn 0.5s forwards;
+            font-weight: bold;
         }
 
         .response.success {
             color: #ff66cc;
         }
 
-        /* Next tier button */
         #next-tier {
             display: none;
             margin-top: 20px;
@@ -371,7 +349,7 @@
             color: #ffe6f9;
         }
 
-        /* Help panel */
+        /* Help Panel */
         .help-panel {
             position: fixed;
             top: 0;
@@ -412,10 +390,7 @@
         }
 
         @keyframes helpSlideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .close-btn {
@@ -503,26 +478,11 @@
             gap: 20px;
         }
 
-        @media (min-width: 768px) {
-            .tools-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
         .tool-box {
             background-color: rgba(26, 0, 18, 0.8);
             border: 1px solid #993266;
             padding: 15px;
             position: relative;
-        }
-
-        .tool-box::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(0deg, rgba(255, 0, 193, 0.05), rgba(255, 0, 193, 0.05) 1px, transparent 1px, transparent 2px);
-            pointer-events: none;
-            animation: flicker 5s infinite alternate;
         }
 
         .tool-title {
@@ -540,12 +500,11 @@
         }
         
         /* Hide browser default clear button on search/text inputs */
-        input[type="text"]::-ms-clear, input[type="text"]::-ms-reveal { display: none; width:0; height:0; }
+        input::-ms-clear, input::-ms-reveal { display: none; width:0; height:0; }
         input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button,
         input[type="search"]::-webkit-search-results-button, input[type="search"]::-webkit-search-results-decoration {
             display: none;
         }
-
 
         .tool-input-group {
             display: flex;
@@ -582,14 +541,6 @@
             z-index: 2;
         }
 
-        .tool-result::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(255, 0, 193, 0.05), rgba(255, 0, 193, 0.05));
-            pointer-events: none;
-        }
-
         /* Help button */
         .help-btn {
             position: absolute;
@@ -613,27 +564,23 @@
         }
 
         /* Hide scrollbars */
-        .help-content::-webkit-scrollbar {
-            width: 0 !important;
-            display: none;
-        }
-        .help-content {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .help-content::-webkit-scrollbar { width: 0 !important; display: none; }
+        .help-content { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .tools-container { grid-template-columns: 1fr; }
+        }
         @media (max-width: 600px) {
             .terminal { padding: 15px; }
-            .cipher-display { font-size: 1.2em; }
+            .cipher-display { font-size: 1em; letter-spacing: 2px; }
             .input-area { flex-direction: column; }
             button { width: 100%; padding: 10px; }
-            .tools-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="timer" id="timer">04:30</div>
+    <div class="timer" id="timer">02:30</div>
     
     <div class="terminal">
         <div class="terminal-header">
@@ -654,7 +601,7 @@
 
         <div class="input-area">
             <span class="input-prompt">> DECODE:</span>
-            <input type="text" id="user-input" placeholder="Enter decoded word" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input type="text" id="user-input" placeholder="Enter decoded phrase" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <button id="decode-btn">DECODE</button>
         </div>
 
@@ -665,6 +612,7 @@
 
     <button class="help-btn" id="help-btn">HELP</button>
 
+    <!-- Help Panel -->
     <div class="help-panel" id="help-panel">
         <div class="help-content">
             <button class="close-btn" id="close-btn">×</button>
@@ -673,26 +621,25 @@
             
             <div class="help-instructions">
                 <h3>MISSION OBJECTIVE</h3>
-                <p>Decode the hexadecimal string to reveal the hidden word.</p>
+                <p>Decode the hexadecimal string to reveal the hidden passphrase.</p>
                 
                 <h3>DECRYPTION PROCESS</h3>
-                <p>Each 2-digit hex group represents a single character.</p>
+                <p>Each 2-digit hex group represents a single character in ASCII format.</p>
                 
                 <p><strong>Example:</strong><br>
-                68 61 63 6B</p>
+                48 41 43 4B 20 49 54</p>
                 
                 <p><strong>Step-by-Step:</strong></p>
                 <ol>
-                    <li>Convert each hex group to decimal (e.g., 68 → 104)</li>
-                    <li>Find the ASCII character for that decimal (104 → "h")</li>
-                    <li>Combine all characters to form the word</li>
+                    <li>Convert each hex group to decimal (e.g., 48 → 72).</li>
+                    <li>Find the ASCII character for that decimal (72 → "H").</li>
+                    <li>Combine all characters to form the phrase. Note that `20` is the hex code for a space.</li>
                 </ol>
                 
                 <h3>OPERATIONAL NOTES</h3>
                 <ul>
-                    <li>All answers are 3–5 letter tech-related words.</li>
-                    <li>Answers are case-insensitive (e.g. "CODE" = "code").</li>
-                    <li>Possible words: code, data, hack, root, gate, chip, byte, null, void, grep, etc.</li>
+                    <li>All answers are 3–5 word phrases.</li>
+                    <li>Answers are case-insensitive (e.g. "HACK IT" = "hack it").</li>
                 </ul>
                 
                 <p><strong>Use the tools below to assist in decryption:</strong></p>
@@ -702,7 +649,7 @@
                 <div class="tool-box">
                     <div class="tool-title">HEX TO DECIMAL CONVERTER</div>
                     <div class="tool-input-group">
-                        <input type="text" id="hex-input" placeholder="Enter hex (e.g. 6A)" maxlength="2">
+                        <input type="text" id="hex-input" placeholder="Enter hex (e.g. 4A)" maxlength="2">
                         <button id="convert-btn">CONVERT</button>
                     </div>
                     <div class="tool-result" id="decimal-result">---</div>
@@ -711,7 +658,7 @@
                 <div class="tool-box">
                     <div class="tool-title">ASCII PAGER</div>
                     <div class="tool-input-group">
-                        <input type="number" id="decimal-input" placeholder="Enter decimal (e.g. 106)" min="0" max="255">
+                        <input type="number" id="decimal-input" placeholder="Enter decimal (e.g. 74)" min="0" max="255">
                         <button id="lookup-btn">LOOKUP</button>
                     </div>
                     <div class="tool-result" id="ascii-result">---</div>
@@ -721,10 +668,12 @@
     </div>
 
     <script>
-        // Security: Disable right-click
+        // --- SECURITY & ANTI-CHEAT ---
+
+        // Disable right-click
         document.addEventListener('contextmenu', e => e.preventDefault());
         
-        // Security: Disable developer tools shortcuts
+        // Disable developer tools shortcuts
         document.onkeydown = function(e) {
             if (
                 e.key === "F12" ||
@@ -737,25 +686,36 @@
             }
         };
         
-        // Security: Reload protection
+        // Redirect on refresh
         if (performance.navigation.type === 1 || performance.navigation.type === 'reload') {
             window.location.replace("index.html");
         }
 
-        // Word list for the game
-        const wordList = [
-            "code", "data", "hack", "root", "gate", "chip", "byte", "fire", 
-            "deep", "bits", "null", "void", "true", "keys", "node", "link", 
-            "worm", "shell", "load", "boot", "cryp", "exit", "ping", "kill", 
-            "bash", "main", "sudo", "auth", "grep", "init", "core", "disk", 
-            "port", "hash", "brew", "loop", "join", "drop", "read", "pull"
-        ];
-        
-        // Security: Obfuscated answer storage
+        // --- GAME CONTENT ---
+
+        // Phrases are stored here, simulating a fetch from `phrases.md`
+        const PHRASES_CONTENT = `
+        ROOT ACCESS GRANTED
+        FIREWALL BREACH IMMINENT
+        DATA CORE EXPOSED
+        ENCRYPTION KEY FOUND
+        SYSTEMS ARE GO
+        UNLOCK THE VAULT
+        GHOST IN THE MACHINE
+        ENTER THE MATRIX
+        MAIN SERVER ONLINE
+        SECURITY PROTOCOLS DISABLED
+        INITIATE DATA TRANSFER
+        TARGET LOCK ACQUIRED
+        BLACK ICE DEFEATED
+        `;
+
+        // --- GLOBAL VARIABLES ---
         let hashedAnswer = '';
         let timer = null;
-        let timeLeft = 270; // 4.5 minutes in seconds
-        
+        let timeLeft = 150; // 2 minutes 30 seconds
+        let gameActive = true; // Flag to control game state
+
         // Simple hash function for obfuscation
         function simpleHash(str) {
             let hash = 0;
@@ -767,12 +727,11 @@
         }
         
         // Security: Decoy variables
-        const decoyAnswer = "proxy";
+        const decoyAnswer = "DECOY PHRASE ACTIVE";
         const fakeHashedAnswer = simpleHash(decoyAnswer);
-        const decoyWordList = ["spoof", "trace", "mask", "clone"];
-        const decoyHex = "70 72 6F 78 79";
+        const decoyHex = "44 45 43 4F 59 20 50 48 52 41 53 45 20 41 43 54 49 56 45";
 
-        // DOM elements
+        // --- DOM ELEMENTS ---
         const timerDisplay = document.getElementById('timer');
         const hexDisplay = document.getElementById('hex-code');
         const userInput = document.getElementById('user-input');
@@ -791,43 +750,52 @@
         const lookupBtn = document.getElementById('lookup-btn');
         const asciiResult = document.getElementById('ascii-result');
 
+        // --- GAME LOGIC ---
+
         // Initialize the game
         function initGame() {
-            // Select a random word
-            const randomIndex = Math.floor(Math.random() * wordList.length);
-            const currentWord = wordList[randomIndex];
+            // Parse phrases
+            const phrases = PHRASES_CONTENT.trim().split('\n').filter(p => p);
             
-            // Store hashed answer
-            hashedAnswer = simpleHash(currentWord.toLowerCase());
+            // Select a random phrase
+            const currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
             
-            // Convert word to hexadecimal
+            // Store hashed answer (case-insensitive)
+            hashedAnswer = simpleHash(currentPhrase.toLowerCase());
+            
+            // Convert phrase to hexadecimal
             let hexString = '';
-            for (let i = 0; i < currentWord.length; i++) {
-                const charCode = currentWord.charCodeAt(i);
+            for (let i = 0; i < currentPhrase.length; i++) {
+                const charCode = currentPhrase.charCodeAt(i);
                 hexString += charCode.toString(16).toUpperCase().padStart(2, '0') + ' ';
             }
             
-            // Display hex string
             hexDisplay.textContent = hexString.trim();
             
-            // Clear previous responses
+            // Reset UI
             responseDiv.textContent = '';
             responseDiv.className = 'response';
             nextTierBtn.style.display = 'none';
             userInput.value = '';
+            userInput.disabled = false;
+            decodeBtn.disabled = false;
             userInput.focus();
             
             // Start timer
             startTimer();
         }
         
-        // Start the countdown timer
+        // Countdown timer
         function startTimer() {
             clearInterval(timer);
-            timeLeft = 270;
+            timeLeft = 150;
             updateTimerDisplay();
             
             timer = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(timer);
+                    return;
+                }
                 timeLeft--;
                 updateTimerDisplay();
                 
@@ -844,7 +812,6 @@
             const seconds = timeLeft % 60;
             timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            // Change color and pulse when time is running out
             if (timeLeft < 60) {
                 timerDisplay.classList.add('pulsing');
             } else {
@@ -852,28 +819,19 @@
             }
         }
         
-        // Handle timeout scenario
+        // Handle timeout
         function handleTimeout() {
+            gameActive = false;
             const log = document.querySelector('.command-log');
             log.innerHTML = '';
             
-            const msg1 = document.createElement('p');
-            msg1.textContent = "SECURITY OVERRIDE TRIGGERED.";
-            log.appendChild(msg1);
+            ['SECURITY OVERRIDE TRIGGERED.', 'ENCRYPTION LOCKDOWN IN EFFECT.', 'Returning to base...'].forEach(text => {
+                const p = document.createElement('p');
+                p.textContent = text;
+                log.appendChild(p);
+            });
             
-            const msg2 = document.createElement('p');
-            msg2.textContent = "ENCRYPTION LOCKDOWN IN EFFECT.";
-            log.appendChild(msg2);
-            
-            const msg3 = document.createElement('p');
-            msg3.textContent = "Returning to base...";
-            log.appendChild(msg3);
-            
-            document.querySelector('.cipher-display').style.display = 'none';
-            document.querySelector('.input-area').style.display = 'none';
-            responseDiv.style.display = 'none';
-            nextTierBtn.style.display = 'none';
-            helpBtn.style.display = 'none';
+            lockUI();
             
             setTimeout(() => {
                 window.location.href = "index.html";
@@ -882,10 +840,14 @@
 
         // Check user's answer
         function checkAnswer() {
+            if (!gameActive) return;
+
             const userAnswer = userInput.value.trim().toLowerCase();
             const hashedInput = simpleHash(userAnswer);
             
             if (hashedInput === hashedAnswer) {
+                gameActive = false;
+                clearInterval(timer);
                 responseDiv.textContent = "> DATA FRAGMENT UNLOCKED: Quantum cipher integrity verified.";
                 responseDiv.className = 'response success';
                 nextTierBtn.style.display = 'block';
@@ -893,11 +855,8 @@
                 const log = document.querySelector('.command-log');
                 const successMsg = document.createElement('p');
                 successMsg.textContent = "NEXT SECURITY LAYER WILL INITIATE ON PROCEED";
-                successMsg.style.opacity = 0;
-                successMsg.style.animation = "fadeInLine 0.5s forwards";
                 log.appendChild(successMsg);
-                
-                clearInterval(timer);
+
             } else {
                 responseDiv.textContent = "> ACCESS DENIED. Cipher anomaly detected.";
                 responseDiv.className = 'response';
@@ -905,44 +864,30 @@
                 userInput.focus();
             }
         }
-
-        // Hex to Decimal conversion
-        function convertHex() {
-            const hex = hexInput.value.trim().toUpperCase();
-            
-            if (!/^[0-9A-F]{1,2}$/.test(hex)) {
-                decimalResult.textContent = "INVALID HEX";
-                return;
+        
+        // Lock UI elements
+        function lockUI() {
+            userInput.disabled = true;
+            decodeBtn.disabled = true;
+            helpBtn.disabled = true;
+            if (helpPanel.classList.contains('active')) {
+                helpPanel.classList.remove('active');
             }
-            
-            const decimal = parseInt(hex, 16);
-            decimalResult.textContent = `Decimal: ${decimal}`;
         }
 
-        // Decimal to ASCII conversion
-        function lookupAscii() {
-            const decimalStr = decimalInput.value;
-            if (decimalStr === '') {
-                 asciiResult.textContent = "INVALID DECIMAL";
-                 return;
-            }
-            const decimal = parseInt(decimalStr);
-            
-            if (isNaN(decimal)) {
-                asciiResult.textContent = "INVALID DECIMAL";
-                return;
-            }
-            
-            if (decimal < 0 || decimal > 255) {
-                asciiResult.textContent = "OUT OF RANGE (0-255)";
-                return;
-            }
-            
-            const char = String.fromCharCode(decimal);
-            asciiResult.textContent = `Character: '${char}'`;
-        }
+        // --- EVENT LISTENERS ---
 
-        // Event listeners
+        // Tab visibility change listener for anti-cheat
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && gameActive) {
+                gameActive = false; // Set to inactive immediately
+                clearInterval(timer);
+                responseDiv.textContent = "> CONNECTION LOST: Surveillance detected. Restart required.";
+                responseDiv.className = 'response';
+                lockUI();
+            }
+        });
+
         decodeBtn.addEventListener('click', checkAnswer);
         userInput.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(); });
         nextTierBtn.addEventListener('click', () => { window.location.href = 'tier3.html'; });
@@ -953,23 +898,49 @@
             this.textContent = isMuted ? '🔊' : '🔇';
             volumeSlider.value = isMuted ? 50 : 0;
         });
-
         volumeSlider.addEventListener('input', function() {
             muteToggle.textContent = this.value === '0' ? '🔇' : '🔊';
         });
 
         // Help panel controls
-        helpBtn.addEventListener('click', () => helpPanel.classList.add('active'));
+        helpBtn.addEventListener('click', () => { if(gameActive) helpPanel.classList.add('active') });
         closeBtn.addEventListener('click', () => helpPanel.classList.remove('active'));
         helpPanel.addEventListener('click', e => { if (e.target === helpPanel) helpPanel.classList.remove('active'); });
 
-        // Tool functions
+        // --- HELP PANEL TOOLS ---
+
+        // Hex to Decimal conversion
+        function convertHex() {
+            const hex = hexInput.value.trim().toUpperCase();
+            if (!/^[0-9A-F]{1,2}$/.test(hex)) {
+                decimalResult.textContent = "INVALID HEX";
+                return;
+            }
+            decimalResult.textContent = `Decimal: ${parseInt(hex, 16)}`;
+        }
+
+        // Decimal to ASCII conversion
+        function lookupAscii() {
+            const decimalStr = decimalInput.value;
+            if (decimalStr === '') {
+                 asciiResult.textContent = "INVALID DECIMAL";
+                 return;
+            }
+            const decimal = parseInt(decimalStr);
+            if (isNaN(decimal) || decimal < 0 || decimal > 255) {
+                asciiResult.textContent = "OUT OF RANGE";
+                return;
+            }
+            asciiResult.textContent = `Character: '${String.fromCharCode(decimal)}'`;
+        }
+
         convertBtn.addEventListener('click', convertHex);
         hexInput.addEventListener('keypress', e => { if (e.key === 'Enter') convertHex(); });
         lookupBtn.addEventListener('click', lookupAscii);
         decimalInput.addEventListener('keypress', e => { if (e.key === 'Enter') lookupAscii(); });
         
-        // Initialize the game after animations
+        // --- INITIALIZATION ---
+        // Initialize the game after entry animations
         setTimeout(initGame, 3000);
     </script>
 </body>
