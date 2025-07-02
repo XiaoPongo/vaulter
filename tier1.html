@@ -158,6 +158,20 @@
             }
         }
 
+        /* Timer */
+        .timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(220, 50, 47, 0.3);
+            color: #dc322f;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 1.1em;
+            z-index: 20;
+        }
+
         /* Terminal header */
         .terminal-header {
             display: flex;
@@ -399,6 +413,15 @@
             font-size: 1.5em;
             cursor: pointer;
             padding: 5px 10px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(220, 50, 47, 0.1);
         }
 
         .help-title {
@@ -518,8 +541,20 @@
             background: rgba(7, 54, 66, 0.5);
             border: 1px solid #586e75;
             color: #eee8d5;
-            padding: 8px;
+            padding: 8px 25px 8px 8px;
             font-family: 'Courier New', Courier, monospace;
+            position: relative;
+        }
+
+        .tool-input-group::after {
+            content: "×";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #859900;
+            cursor: pointer;
+            z-index: 3;
         }
 
         .tool-result {
@@ -573,6 +608,17 @@
             color: #eee8d5;
         }
 
+        /* Hide scrollbars */
+        .help-content::-webkit-scrollbar {
+            width: 0 !important;
+            display: none;
+        }
+
+        .help-content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         /* Mobile responsiveness */
         @media (max-width: 600px) {
             .terminal {
@@ -599,6 +645,8 @@
     </style>
 </head>
 <body>
+    <div class="timer" id="timer">03:00</div>
+    
     <div class="terminal">
         <div class="terminal-header">
             <div class="glitch" data-text="DATA VAULT HEIST :: TIER 1">DATA VAULT HEIST :: TIER 1</div>
@@ -632,7 +680,7 @@
     <!-- Help Panel -->
     <div class="help-panel" id="help-panel">
         <div class="help-content">
-            <button class="close-btn" id="close-btn">[X]</button>
+            <button class="close-btn" id="close-btn">×</button>
             
             <h2 class="help-title">DECRYPTION HELP – TIER 1</h2>
             
@@ -686,6 +734,26 @@
     </div>
 
     <script>
+        // Security: Disable right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Security: Disable developer tools shortcuts
+        document.onkeydown = function(e) {
+            if (
+                e.key === "F12" ||
+                (e.ctrlKey && e.shiftKey && e.key === "I") ||
+                (e.ctrlKey && e.shiftKey && e.key === "J") ||
+                (e.ctrlKey && e.key === "U")
+            ) {
+                return false;
+            }
+        };
+        
+        // Security: Reload protection
+        if (performance.navigation.type === 1) {
+            window.location.replace("index.html");
+        }
+
         // Word list for the game
         const wordList = [
             "code", "data", "hack", "root", "gate", "chip", "byte", "fire", 
@@ -694,8 +762,30 @@
             "bash", "main", "sudo", "auth", "grep", "init", "core", "disk", 
             "port", "hash", "brew", "loop", "join", "drop", "read", "pull"
         ];
+        
+        // Security: Obfuscated answer storage
+        let hashedAnswer = '';
+        let timer = null;
+        let timeLeft = 180; // 3 minutes in seconds
+        
+        // Simple hash function for obfuscation
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash.toString();
+        }
+        
+        // Security: Decoy variables
+        const decoyAnswer = "ping";
+        const fakeHashedAnswer = simpleHash(decoyAnswer);
+        const decoyWordList = ["fake", "test", "demo", "temp"];
+        const decoyBinary = "01100110 01100001 01101011 01100101";
 
         // DOM elements
+        const timerDisplay = document.getElementById('timer');
         const binaryDisplay = document.getElementById('binary-code');
         const userInput = document.getElementById('user-input');
         const decodeBtn = document.getElementById('decode-btn');
@@ -713,13 +803,14 @@
         const lookupBtn = document.getElementById('lookup-btn');
         const asciiResult = document.getElementById('ascii-result');
 
-        // Current word to decode
-        let currentWord = '';
-
         // Initialize the game
         function initGame() {
             // Select a random word
-            currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+            const randomIndex = Math.floor(Math.random() * wordList.length);
+            currentWord = wordList[randomIndex];
+            
+            // Store hashed answer
+            hashedAnswer = simpleHash(currentWord.toLowerCase());
             
             // Convert word to binary
             let binaryString = '';
@@ -737,13 +828,83 @@
             nextTierBtn.style.display = 'none';
             userInput.value = '';
             userInput.focus();
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 180;
+            updateTimerDisplay();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+        
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color when time is running out
+            if (timeLeft < 60) {
+                timerDisplay.style.backgroundColor = "rgba(220, 50, 47, 0.6)";
+            }
+        }
+        
+        // Handle timeout scenario
+        function handleTimeout() {
+            const log = document.querySelector('.command-log');
+            
+            // Clear existing messages
+            log.innerHTML = '';
+            
+            // Add timeout messages
+            const msg1 = document.createElement('p');
+            msg1.textContent = "SECURITY BREACH DETECTED.";
+            log.appendChild(msg1);
+            
+            const msg2 = document.createElement('p');
+            msg2.textContent = "TIMEOUT: Decryption window exceeded.";
+            log.appendChild(msg2);
+            
+            const msg3 = document.createElement('p');
+            msg3.textContent = "DATA FRAGMENT LOST.";
+            log.appendChild(msg3);
+            
+            const msg4 = document.createElement('p');
+            msg4.textContent = "Returning to base...";
+            log.appendChild(msg4);
+            
+            // Hide other elements
+            document.querySelector('.binary-display').style.display = 'none';
+            document.querySelector('.input-area').style.display = 'none';
+            responseDiv.style.display = 'none';
+            nextTierBtn.style.display = 'none';
+            document.getElementById('help-btn').style.display = 'none';
+            
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 5000);
         }
 
         // Check user's answer
         function checkAnswer() {
             const userAnswer = userInput.value.trim().toLowerCase();
+            const hashedInput = simpleHash(userAnswer);
             
-            if (userAnswer === currentWord) {
+            if (hashedInput === hashedAnswer) {
                 responseDiv.textContent = "> DATA FRAGMENT UNLOCKED: Enigma-class pattern matched.";
                 responseDiv.className = 'response success';
                 nextTierBtn.style.display = 'block';
@@ -755,6 +916,9 @@
                 successMsg.style.opacity = 0;
                 successMsg.style.animation = "fadeInLine 0.5s forwards";
                 log.appendChild(successMsg);
+                
+                // Stop timer
+                clearInterval(timer);
             } else {
                 responseDiv.textContent = "> ACCESS DENIED. Pattern mismatch.";
                 responseDiv.className = 'response';
@@ -798,6 +962,15 @@
             asciiResult.textContent = `Character: '${char}'`;
         }
 
+        // Clear input field
+        function clearInput(inputId) {
+            if (inputId === 'binary-input') {
+                binaryInput.value = '';
+            } else if (inputId === 'decimal-input') {
+                decimalInput.value = '';
+            }
+        }
+
         // Event listeners
         decodeBtn.addEventListener('click', checkAnswer);
         
@@ -808,9 +981,7 @@
         });
 
         nextTierBtn.addEventListener('click', function() {
-            // For demo purposes, just restart the game
-            initGame();
-            // In actual game: window.location.href = 'tier2.html';
+            window.location.href = 'tier2.html';
         });
 
         // Volume controls (placeholder functionality)
@@ -856,6 +1027,10 @@
                 convertBinary();
             }
         });
+        
+        binaryInput.addEventListener('dblclick', function() {
+            this.value = '';
+        });
 
         lookupBtn.addEventListener('click', lookupAscii);
         
@@ -863,6 +1038,10 @@
             if (e.key === 'Enter') {
                 lookupAscii();
             }
+        });
+        
+        decimalInput.addEventListener('dblclick', function() {
+            this.value = '';
         });
 
         // Initialize the game after animations
